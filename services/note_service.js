@@ -30,3 +30,20 @@ exports.getNote = async (req, res) => {
         return res.status(400).json({'message': error.message});
     }
 }
+
+exports.getNotes = async (req, res) => {
+    try {
+        const { user } = req;
+        const page = parseInt(req.query.page);
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const total = await Note.countDocuments({'user_id': user.id});
+        const notes = await Note.find({'user_id': user.id}).sort({ updatedAt: -1 }).skip(skip).limit(limit);
+        return res.json({
+            "total": Math.ceil(total / limit),
+            "notes": notes
+        });
+    } catch (error) {
+        return res.status(400).json({'message': error.message});
+    }
+}

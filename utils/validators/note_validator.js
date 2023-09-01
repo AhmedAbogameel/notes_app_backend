@@ -13,3 +13,11 @@ exports.getNoteValidator = [
         .isMongoId().withMessage("Invalid id"),
     validatorMiddleware,
 ]
+
+exports.getNotesValidator = [
+    check('page')
+        .notEmpty().withMessage("query param page is required")
+        .isInt().withMessage("query param page must be int")
+        .custom(v => v > 0).withMessage("query param page must be above 0"),
+    validatorMiddleware,
+]
