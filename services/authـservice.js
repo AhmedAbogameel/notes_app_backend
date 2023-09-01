@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.protect = async (req, res) => {
+exports.protect = async (req, res, next) => {
     try {
         let token;
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -45,6 +45,8 @@ exports.protect = async (req, res) => {
         if (!user) {
             return res.status(401).json({ 'message': "Unauthorized!" });
         }
+        req.user_id = user._id;
+        next();
     } catch (error) {
         if (error.name === 'JsonWebTokenError') {
             return res.status(403).json({'message': "Invalid token, login again."});
