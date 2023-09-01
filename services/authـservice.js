@@ -45,7 +45,7 @@ exports.protect = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ 'message': "Unauthorized!" });
         }
-        req.user_id = user._id;
+        req.user = user;
         next();
     } catch (error) {
         if (error.name === 'JsonWebTokenError') {
