@@ -26,7 +26,6 @@ exports.registerValidator = [
     validatorMiddleware,
 ];
 
-
 exports.loginValidator = [
     body('password')
         .notEmpty().withMessage("Password required!")
