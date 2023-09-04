@@ -67,3 +67,20 @@ exports.editNote = async (req, res) => {
         return res.status(400).json({ 'message': error.message });
     }
 }
+
+exports.deleteNote = async (req, res) => {
+    try {
+        const { user } = req;
+        const { id } = req.params;
+        const note = await Note.findById(id);
+        if (!note) {
+            return res.status(404).json({"message": `note ${id} not found`});
+        } else if (user.id !== note.user_id) {
+            return res.status(401).json({"message": "Unauthorized!"});
+        }
+        await note.deleteOne();
+        res.json(note);
+    } catch (error) {
+        return res.status(400).json({'message': error.message});
+    }
+}
